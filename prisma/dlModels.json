@@ -1,0 +1,14 @@
+[
+  {
+    "name": "malign melanom",
+    "featured": true,
+    "image": "https://images.pexels.com/photos/943150/pexels-photo-943150.jpeg?auto=compress&cs=tinysrgb&w=1600",
+    "clerkId": "clerkId"
+  },
+  {
+    "name": "malign blabla",
+    "featured": true,
+    "image": "https://images.pexels.com/photos/5705090/pexels-photo-5705090.jpeg?auto=compress&cs=tinysrgb&w=1600",
+    "clerkId": "clerkId"
+  }
+]
