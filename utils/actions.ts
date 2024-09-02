@@ -9,8 +9,11 @@ export const fetchFeaturedModels = async () => {
   return models;
 };
 
-export const fetchAllModels = async () => {
+export const fetchAllModels = async ({ search = "" }: { search: string }) => {
   const models = await db.dlModel.findMany({
+    where: {
+      OR: [{ name: { contains: search, mode: "insensitive" } }],
+    },
     orderBy: {
       createdAt: "desc",
     },

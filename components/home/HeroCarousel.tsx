@@ -8,12 +8,11 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import { Button } from "../ui/button";
 
-const carouselImages = [hero1, hero3,];
-const heroText = [ "hemen baslayin","hep yaninizdayiz"];
+const carouselImages = [hero1, hero3];
+const heroText = ["hemen baslayin", "hep yaninizdayiz"];
 const heroContent = [
   "Tamamen ucretsiz modellerimizi kullanmaya hemen baslayin Tanilarinizi modellerimizle destekleyin",
   "Tum tani surecinde bizden destek alabilirsiniz",

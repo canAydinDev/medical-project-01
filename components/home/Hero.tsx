@@ -1,10 +1,13 @@
-
-import HeroCarousel from './HeroCarousel'
+import HeroCarousel from "./HeroCarousel";
+import HeroText from "./HeroText";
 
 function Hero() {
   return (
-    <section><HeroCarousel/></section>
-  )
+    <section>
+      <HeroText />
+      <HeroCarousel />
+    </section>
+  );
 }
 
-export default Hero
+export default Hero;
