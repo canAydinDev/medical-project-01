@@ -12,7 +12,7 @@ function DlModelsGrid({ models }: { models: DlModel[] }) {
         const modelId = model.id;
         return (
           <article key={modelId} className="group relative">
-            <Link href={`/products/${modelId}`}>
+            <Link href={`/models/${modelId}`}>
               <Card className="transform group-hover:shadow-xl transition-shadow duration-500">
                 <CardContent className="p-4">
                   <div className="relative h-64 md:h-48 rounded overflow-hidden ">
@@ -27,7 +27,6 @@ function DlModelsGrid({ models }: { models: DlModel[] }) {
                   </div>
                   <div className="mt-4 text-center">
                     <h2 className="text-lg  capitalize text-myColor">{name}</h2>
-                  
                   </div>
                 </CardContent>
               </Card>

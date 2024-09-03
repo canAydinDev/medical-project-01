@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import db from "./db";
 
 export const fetchFeaturedModels = async () => {
@@ -19,4 +20,16 @@ export const fetchAllModels = async ({ search = "" }: { search: string }) => {
     },
   });
   return models;
+};
+
+export const fetchSingleModel = async (modelId: string) => {
+  const model = db.dlModel.findUnique({
+    where: {
+      id: modelId,
+    },
+  });
+  if (!model) {
+    redirect("/models");
+  }
+  return model;
 };

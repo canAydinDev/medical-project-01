@@ -11,7 +11,7 @@ function DlModelsList({ models }: { models: DlModel[] }) {
         const modelId = model.id;
         return (
           <article key={modelId} className="group relative">
-            <Link href={`/products/${modelId}`}>
+            <Link href={`/models/${modelId}`}>
               <Card className="transform group-hover:shadow-xl transition-shadow duration-500">
                 <CardContent className="p-8 gap-y-4 grid md:grid-cols-3">
                   <div className="relative h-64  md:h-48 md:w-48">
