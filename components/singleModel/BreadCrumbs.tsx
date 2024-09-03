@@ -6,6 +6,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import React from "react";
 
 function BreadCrumbs({ name }: { name: string }) {
   return (
@@ -19,7 +20,7 @@ function BreadCrumbs({ name }: { name: string }) {
 
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbLink href="/models" className="capitalize text-lg">
+          <BreadcrumbLink href="/products" className="capitalize text-lg">
             modeller
           </BreadcrumbLink>
         </BreadcrumbItem>
