@@ -33,3 +33,9 @@ export const fetchSingleModel = async (modelId: string) => {
   }
   return model;
 };
+export const createModelAction = async (
+  prevState: any,
+  formData: FormData
+): Promise<{ message: string }> => {
+  return { message: "Model oluşturuldu" };
+};
