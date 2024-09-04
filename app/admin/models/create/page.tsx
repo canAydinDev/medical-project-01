@@ -13,7 +13,7 @@ function CreateModelPage() {
     <section>
       <h1 className="text-2xl font-semibold mb-8 capitalize">create product</h1>
       <div className="border p-8 rounded-md">
-        <form action={}>
+        <form action={createModelAction}>
           <div className="mb-2">
             <Label htmlFor="name">Model Adı</Label>
             <Input id="name" name="name" type="text" />
