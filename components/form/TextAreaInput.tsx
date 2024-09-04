@@ -25,3 +25,5 @@ function TextAreaInput({ name, labelText, defaultValue }: TextAreaInputProps) {
     </div>
   );
 }
+
+export default TextAreaInput;

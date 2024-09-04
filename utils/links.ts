@@ -9,7 +9,7 @@ export const links: NavLink[] = [
   { href: "/models", label: "modeller" },
   { href: "/favorites", label: "favoriler" },
   { href: "/patients", label: "hastalar" },
-  { href: "/admin/predictions", label: "dashboard" },
+  { href: "/admin/models/create", label: "dashboard" },
 ];
 
 export const adminLinks: NavLink[] = [

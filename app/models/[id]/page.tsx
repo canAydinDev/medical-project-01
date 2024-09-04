@@ -10,9 +10,11 @@ async function SingleModelPage({ params }: { params: { id: string } }) {
   return (
     <section>
       <BreadCrumbs name={model?.name || ""} />
-      <div className="mt-6 grid gap-y-8 lg:grid-cols-2 lg:gap-x-16">
-        {/* IMAGE FIRST COL */}
-        <div className="relative h-full">
+
+      {/* Responsive Grid Yapısı */}
+      <div className="mt-6 grid grid-cols-1 sm:grid-cols-6 lg:grid-cols-12 gap-y-6 gap-x-6">
+        {/* Resim alanı */}
+        <div className="col-span-1 sm:col-span-2 relative h-full">
           <Image
             src={model?.image || ""}
             alt={model?.name || ""}
@@ -22,8 +24,9 @@ async function SingleModelPage({ params }: { params: { id: string } }) {
             className="w-full rounded-md object-cover"
           />
         </div>
-        {/* PRODUCT INFO SECOND COL */}
-        <div>
+
+        {/* Başlık ve favori butonu alanı */}
+        <div className="col-span-1 sm:col-span-4 flex flex-col gap-x-8 items-start">
           <div className="flex gap-x-8 items-center">
             <h1 className="capitalize text-3xl font-bold">
               {model?.name || ""}
@@ -31,13 +34,22 @@ async function SingleModelPage({ params }: { params: { id: string } }) {
             <FavoriteToggleButton modelId={params.id} />
           </div>
           <ModelRating modelId={params.id} />
-
-          <p className="mt-6 leading-8 text-muted-foreground">
-            {model?.description}
-          </p>
         </div>
+
+        {/* Form alanı */}
+        <div className="col-span-1 sm:col-span-6 lg:col-span-6 flex justify-center items-center">
+          Buraya form gelecek
+        </div>
+      </div>
+
+      {/* Açıklama Alanı */}
+      <div className="grid grid-cols-1 sm:grid-cols-6">
+        <p className="col-span-1 sm:col-span-6 mt-6 leading-8 text-muted-foreground">
+          {model?.description}
+        </p>
       </div>
     </section>
   );
 }
+
 export default SingleModelPage;
