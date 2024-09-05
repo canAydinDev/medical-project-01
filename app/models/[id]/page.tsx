@@ -11,9 +11,7 @@ async function SingleModelPage({ params }: { params: { id: string } }) {
     <section>
       <BreadCrumbs name={model?.name || ""} />
 
-      {/* Responsive Grid Yapısı */}
       <div className="mt-6 grid grid-cols-1 sm:grid-cols-6 lg:grid-cols-12 gap-y-6 gap-x-6">
-        {/* Resim alanı */}
         <div className="col-span-1 sm:col-span-2 relative h-full">
           <Image
             src={model?.image || ""}
@@ -25,7 +23,6 @@ async function SingleModelPage({ params }: { params: { id: string } }) {
           />
         </div>
 
-        {/* Başlık ve favori butonu alanı */}
         <div className="col-span-1 sm:col-span-4 flex flex-col gap-x-8 items-start">
           <div className="flex gap-x-8 items-center">
             <h1 className="capitalize text-3xl font-bold">
@@ -36,13 +33,11 @@ async function SingleModelPage({ params }: { params: { id: string } }) {
           <ModelRating modelId={params.id} />
         </div>
 
-        {/* Form alanı */}
         <div className="col-span-1 sm:col-span-6 lg:col-span-6 flex justify-center items-center">
           Buraya form gelecek
         </div>
       </div>
 
-      {/* Açıklama Alanı */}
       <div className="grid grid-cols-1 sm:grid-cols-6">
         <p className="col-span-1 sm:col-span-6 mt-6 leading-8 text-muted-foreground">
           {model?.description}

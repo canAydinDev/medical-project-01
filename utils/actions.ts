@@ -4,7 +4,8 @@ import { redirect } from "next/navigation";
 import db from "./db";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { imageSchema, modelSchema, validateWithZodSchema } from "./schemas";
-import { uploadImage } from "./supabase";
+import { deleteImage, uploadImage } from "./supabase";
+import { revalidatePath } from "next/cache";
 
 export const fetchFeaturedModels = async () => {
   const models = await db.dlModel.findMany({
@@ -76,4 +77,81 @@ export const createModelAction = async (
     return renderError(error);
   }
   redirect("/admin/products");
+};
+
+const getAdminUser = async () => {
+  const user = await getAuthUser();
+  if (user.id !== process.env.ADMIN_USER_ID) redirect("/");
+  return user;
+};
+
+export const fetchAdminModels = async () => {
+  await getAdminUser();
+  const models = await db.dlModel.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return models;
+};
+
+export const deleteModelAction = async (prevState: { modelId: string }) => {
+  const { modelId } = prevState;
+  await getAdminUser();
+
+  try {
+    await db.dlModel.delete({
+      where: {
+        id: modelId,
+      },
+    });
+    await deleteImage(modelId);
+    revalidatePath("/admin/models");
+    return { message: "Model silindi" };
+  } catch (error) {
+    return renderError(error);
+  }
+};
+
+export const fetchAdminModelDetails = async (modelId: string) => {
+  await getAdminUser();
+  const model = db.dlModel.findUnique({
+    where: {
+      id: modelId,
+    },
+  });
+  if (!model) redirect("/admin/models");
+  return model;
+};
+
+export const updateModelAction = async (prevState: any, formData: FormData) => {
+  return { message: " Model guncellendi" };
+};
+
+export const updateModelImageAction = async (
+  prevState: any,
+  formData: FormData
+) => {
+  await getAdminUser();
+  try {
+    const image = formData.get("image") as File;
+    const modelId = formData.get("id") as string;
+    const oldImageUrl = formData.get("url") as string;
+
+    const validatedFile = validateWithZodSchema(imageSchema, { image });
+    const fullPath = await uploadImage(validatedFile.image);
+    await deleteImage(oldImageUrl);
+    await db.dlModel.update({
+      where: {
+        id: modelId,
+      },
+      data: {
+        image: fullPath,
+      },
+    });
+    revalidatePath(`/admin/models/${modelId}/edit`);
+    return { message: "Model resmi güncellendi" };
+  } catch (error) {
+    return renderError(error);
+  }
 };
