@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 
 function EmptyList({
-  heading = "No items found.",
+  heading = "Nesne bulunamadı",
   className,
 }: {
   heading?: string;

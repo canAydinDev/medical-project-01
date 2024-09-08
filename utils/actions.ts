@@ -3,7 +3,12 @@
 import { redirect } from "next/navigation";
 import db from "./db";
 import { auth, currentUser } from "@clerk/nextjs/server";
-import { imageSchema, modelSchema, validateWithZodSchema } from "./schemas";
+import {
+  imageSchema,
+  modelSchema,
+  patientSchema,
+  validateWithZodSchema,
+} from "./schemas";
 import { deleteImage, uploadImage } from "./supabase";
 import { revalidatePath } from "next/cache";
 
@@ -125,7 +130,21 @@ export const fetchAdminModelDetails = async (modelId: string) => {
 };
 
 export const updateModelAction = async (prevState: any, formData: FormData) => {
-  return { message: " Model guncellendi" };
+  await getAdminUser();
+  try {
+    const modelId = formData.get("id") as string;
+    const rawData = Object.fromEntries(formData);
+
+    const validatedFields = validateWithZodSchema(modelSchema, rawData);
+    await db.dlModel.update({
+      where: { id: modelId },
+      data: { ...validatedFields },
+    });
+    revalidatePath(`/admin/models/${modelId}/edit`);
+    return { message: " Model guncellendi" };
+  } catch (error) {
+    return renderError(error);
+  }
 };
 
 export const updateModelImageAction = async (
@@ -154,4 +173,69 @@ export const updateModelImageAction = async (
   } catch (error) {
     return renderError(error);
   }
+};
+
+export const fetchUserPatients = async () => {
+  const user = await getAuthUser();
+
+  const patients = await db.patient.findMany({
+    where: {
+      clerkId: user.id,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return patients;
+};
+
+export const deletePatientAction = async (prevState: { patientId: string }) => {
+  const { patientId } = prevState;
+  await getAuthUser();
+
+  try {
+    await db.patient.delete({
+      where: {
+        id: patientId,
+      },
+    });
+    revalidatePath("/patients");
+    return { message: "Hasta silindi" };
+  } catch (error) {
+    return renderError(error);
+  }
+};
+
+export const createPatientAction = async (
+  prevState: any,
+  formData: FormData
+): Promise<{ message: string }> => {
+  const user = await getAuthUser();
+  try {
+    const name = formData.get("name") as string;
+    const file = formData.get("image") as File;
+    const modelId = formData.get("modelId") as string;
+
+    const validatedFields = validateWithZodSchema(patientSchema, { name });
+    const validatedFile = validateWithZodSchema(imageSchema, { image: file });
+    const predict = await predictModel(file);
+
+    await db.patient.create({
+      data: {
+        name: name,
+        clerkId: user.id,
+        prediction: predict,
+        modelId: modelId,
+      },
+    });
+
+    revalidatePath("/patients");
+  } catch (error) {
+    return renderError(error);
+  }
+  redirect("/patients");
+};
+
+const predictModel = async (image: File) => {
+  return "hello";
 };

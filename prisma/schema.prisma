@@ -34,8 +34,10 @@ model Favorite {
 model Patient {
   id        String   @id @default(uuid())
   clerkId  String
+  name String
   dlModel   DlModel  @relation(fields: [modelId], references: [id], onDelete: Cascade)
   modelId String
+  prediction String @default("Sonuc: ...")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

@@ -3,45 +3,47 @@ import { fetchSingleModel } from "@/utils/actions";
 import Image from "next/image";
 import FavoriteToggleButton from "@/components/dlModels/FavouriteToggleButton";
 import ModelRating from "@/components/singleModel/ModelRating";
+import CreatePatientPage from "@/components/patients/CreatePatientPage";
+import { Card, CardContent } from "@/components/ui/card";
 
 async function SingleModelPage({ params }: { params: { id: string } }) {
   const model = await fetchSingleModel(params.id);
-
+  const modelId = params.id || "";
   return (
     <section>
       <BreadCrumbs name={model?.name || ""} />
 
-      <div className="mt-6 grid grid-cols-1 sm:grid-cols-6 lg:grid-cols-12 gap-y-6 gap-x-6">
-        <div className="col-span-1 sm:col-span-2 relative h-full">
-          <Image
-            src={model?.image || ""}
-            alt={model?.name || ""}
-            fill
-            sizes="(max-width:768px) 100vw,(max-width:1200px) 50vw,33vw"
-            priority
-            className="w-full rounded-md object-cover"
-          />
+      <div className="grid grid-cols-12 gap-10">
+        <div className="md:col-span-3">
+          <Card className="transform group-hover:shadow-xl transition-shadow duration-500">
+            <CardContent className="p-4">
+              <div className="relative h-64 md:h-48 rounded overflow-hidden ">
+                <Image
+                  src={model?.image || ""}
+                  alt={model?.name || ""}
+                  fill
+                  sizes="(max-width:768px) 100vw,(max-width:1200px) 50vw,33vw"
+                  priority
+                  className="rounded w-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                />
+              </div>
+              <div className="mt-4 text-center">
+                <h2 className="text-lg  capitalize text-myColor">
+                  {model?.name || ""}
+                </h2>
+              </div>
+            </CardContent>
+          </Card>
         </div>
-
-        <div className="col-span-1 sm:col-span-4 flex flex-col gap-x-8 items-start">
-          <div className="flex gap-x-8 items-center">
-            <h1 className="capitalize text-3xl font-bold">
-              {model?.name || ""}
-            </h1>
-            <FavoriteToggleButton modelId={params.id} />
-          </div>
-          <ModelRating modelId={params.id} />
-        </div>
-
-        <div className="col-span-1 sm:col-span-6 lg:col-span-6 flex justify-center items-center">
-          Buraya form gelecek
+        <div className="md:col-span-6 ">
+          <CreatePatientPage modelId={modelId} />
         </div>
       </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-6">
-        <p className="col-span-1 sm:col-span-6 mt-6 leading-8 text-muted-foreground">
-          {model?.description}
-        </p>
+      <div className="mt-4 text-center">
+        <h2 className="text-lg  capitalize text-myColor">
+          {model?.name || ""}
+        </h2>
+        <p>{model?.description}</p>
       </div>
     </section>
   );

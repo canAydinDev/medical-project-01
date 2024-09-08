@@ -20,6 +20,16 @@ export const modelSchema = z.object({
     }
   ),
 });
+export const patientSchema = z.object({
+  name: z
+    .string()
+    .min(2, {
+      message: "isim 2 karakterden fazla olmalidir.",
+    })
+    .max(100, {
+      message: "isim 100 karakterden az olmalidir.",
+    }),
+});
 
 export function validateWithZodSchema<T>(
   schema: ZodSchema<T>,
