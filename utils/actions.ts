@@ -218,15 +218,16 @@ export const createPatientAction = async (
 
     const validatedFields = validateWithZodSchema(patientSchema, { name });
     const validatedFile = validateWithZodSchema(imageSchema, { image: file });
-    const myPrediction = await predictModel(file);
-    const sonuc = myPrediction.prediction;
-    const predict = sonuc === 1 ? "malign" : "benign";
 
+    // Flask API'ye tahmin işlemini başlatacak bir istek gönder
+    const jobId = await startPrediction(file);
+
+    // Kullanıcıya işlemin başladığını ve sonucun beklenmesi gerektiğini bildir
     await db.patient.create({
       data: {
         name: name,
         clerkId: user.id,
-        prediction: predict,
+        prediction: jobId, // Tahmin sonuçlanmadan önce jobId saklanıyor
         modelId: modelId,
       },
     });
@@ -238,34 +239,65 @@ export const createPatientAction = async (
   redirect("/patients");
 };
 
-const predictModel = async (image: File) => {
+// Flask API'de tahmin işlemini başlatan işlev
+const startPrediction = async (image: File) => {
   try {
     const formData = new FormData();
     formData.append("img", image);
-
-    const timeout = 20000; // 10 saniye timeout süresi
-    const controller = new AbortController();
-    const id = setTimeout(() => controller.abort(), timeout); // Timeout süresi dolunca isteği iptal eder
 
     const response = await fetch(
       "https://flask-cances-app.onrender.com/predict",
       {
         method: "POST",
         body: formData,
-        signal: controller.signal, // AbortController ile timeout kontrolü
       }
     );
-
-    clearTimeout(id); // Eğer istek başarılı olursa timeout'u temizle
 
     if (!response.ok) {
       throw new Error("Tahmin API isteğinde hata oluştu");
     }
 
     const result = await response.json();
-
-    return result;
+    return result.jobId; // İş kimliğini döndür
   } catch (error) {
-    return renderError(error);
+    console.error("Hata oluştu:", error);
+    return null;
+  }
+};
+
+export const checkJobStatusAction = async (
+  prevState: any,
+  formData: FormData
+): Promise<{ message: string }> => {
+  const jobId = formData.get("jobId") as string; // formData'dan jobId'yi alıyoruz
+  const patientId = formData.get("patientId") as string;
+
+  try {
+    const response = await fetch(
+      `https://flask-cances-app.onrender.com/status/${jobId}`,
+      {
+        method: "GET",
+      }
+    );
+
+    const result = await response.json();
+
+    if (result.status === "completed") {
+      console.log("Tahmin sonucu:", result.prediction);
+      const predictionResult = result.prediction === 1 ? "malign" : "benign";
+      await db.patient.update({
+        where: { id: patientId },
+        data: { prediction: predictionResult }, // Sadece 'name' alanı güncelleniyor
+      });
+      return { message: `Tahmin sonucu: ${predictionResult}` };
+    } else {
+      console.log("İşlem hala devam ediyor");
+      return {
+        message: "İşlem hala devam ediyor. Lütfen daha sonra tekrar deneyin.",
+      };
+    }
+  } catch (error) {
+    console.error("Hata oluştu:", error);
+    return { message: "Bir hata oluştu." };
   }
 };

@@ -9,9 +9,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { deletePatientAction, fetchUserPatients } from "@/utils/actions";
+import {
+  checkJobStatusAction,
+  deletePatientAction,
+  fetchUserPatients,
+} from "@/utils/actions";
 import FormContainer from "@/components/form/FormContainer";
-import { IconButton } from "@/components/form/Buttons";
+import { IconButton, SubmitButton } from "@/components/form/Buttons";
+import FormInput from "@/components/form/FormInput";
 
 async function Patients() {
   const patients = await fetchUserPatients();
@@ -37,6 +42,24 @@ async function Patients() {
               <TableRow key={patientId}>
                 <TableCell>{name}</TableCell>
                 <TableCell>model sonucu: {patient.prediction}</TableCell>
+                <TableCell>
+                  <FormContainer action={checkJobStatusAction}>
+                    <input
+                      type="hidden"
+                      id="jobId"
+                      name="jobId"
+                      value={patient.prediction}
+                    />
+                    <input
+                      type="hidden"
+                      id="patientId"
+                      name="patientId"
+                      value={patient.id}
+                    />
+
+                    <SubmitButton text="sonuc gor" className="mt-8" />
+                  </FormContainer>
+                </TableCell>
                 <TableCell>
                   <DeletePatient patientId={patientId} />
                 </TableCell>
