@@ -243,7 +243,7 @@ const predictModel = async (image: File) => {
     const formData = new FormData();
     formData.append("img", image);
 
-    const timeout = 10000; // 10 saniye timeout süresi
+    const timeout = 20000; // 10 saniye timeout süresi
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), timeout); // Timeout süresi dolunca isteği iptal eder
 
