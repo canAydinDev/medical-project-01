@@ -41,7 +41,12 @@ async function Patients() {
             return (
               <TableRow key={patientId}>
                 <TableCell>{name}</TableCell>
-                <TableCell>model sonucu: {patient.prediction}</TableCell>
+                <TableCell>
+                  {patient.prediction === "malign" ||
+                  patient.prediction === "benign"
+                    ? `Model sonucu: ${patient.prediction}`
+                    : "Model sonuc uretiyor..."}
+                </TableCell>
                 <TableCell>
                   <FormContainer action={checkJobStatusAction}>
                     <input

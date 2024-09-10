@@ -287,17 +287,21 @@ export const checkJobStatusAction = async (
       const predictionResult = result.prediction === 1 ? "malign" : "benign";
       await db.patient.update({
         where: { id: patientId },
-        data: { prediction: predictionResult }, // Sadece 'name' alanı güncelleniyor
+        data: { prediction: predictionResult },
       });
+      revalidatePath("/patients");
       return { message: `Tahmin sonucu: ${predictionResult}` };
     } else {
       console.log("İşlem hala devam ediyor");
+      revalidatePath("/patients");
       return {
         message: "İşlem hala devam ediyor. Lütfen daha sonra tekrar deneyin.",
       };
     }
   } catch (error) {
+    revalidatePath("/patients");
     console.error("Hata oluştu:", error);
     return { message: "Bir hata oluştu." };
   }
+  redirect("/patients");
 };
