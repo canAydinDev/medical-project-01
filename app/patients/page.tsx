@@ -1,6 +1,5 @@
 import React from "react";
 import EmptyList from "@/components/global/EmptyList";
-import Link from "next/link";
 import {
   Table,
   TableBody,
