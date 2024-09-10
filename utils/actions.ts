@@ -241,7 +241,7 @@ export const createPatientAction = async (
 const predictModel = async (image: File) => {
   try {
     const formData = new FormData();
-    formData.append("img", image); // img olarak ekliyoruz çünkü Flask bunu bekliyor
+    formData.append("img", image);
 
     const response = await fetch(
       "https://flask-cances-app.onrender.com/predict",
