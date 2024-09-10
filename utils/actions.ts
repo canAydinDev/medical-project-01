@@ -240,7 +240,6 @@ export const createPatientAction = async (
 
 const predictModel = async (image: File) => {
   try {
-    // FormData oluşturup dosyayı ekle
     const formData = new FormData();
     formData.append("img", image); // img olarak ekliyoruz çünkü Flask bunu bekliyor
 
