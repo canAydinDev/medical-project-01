@@ -247,7 +247,7 @@ const predictModel = async (image: File) => {
       "https://flask-cances-app.onrender.com/predict",
       {
         method: "POST",
-        body: formData, // FormData'yı body olarak gönderiyoruz
+        body: formData,
       }
     );
 
