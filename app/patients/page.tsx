@@ -37,7 +37,7 @@ async function Patients() {
             return (
               <TableRow key={patientId}>
                 <TableCell>{name}</TableCell>
-                <TableCell>model sonucu</TableCell>
+                <TableCell>model sonucu: {patient.prediction}</TableCell>
                 <TableCell>
                   <DeletePatient patientId={patientId} />
                 </TableCell>

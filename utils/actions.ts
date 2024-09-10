@@ -81,7 +81,7 @@ export const createModelAction = async (
   } catch (error) {
     return renderError(error);
   }
-  redirect("/admin/products");
+  redirect("/admin/models");
 };
 
 const getAdminUser = async () => {
@@ -218,7 +218,9 @@ export const createPatientAction = async (
 
     const validatedFields = validateWithZodSchema(patientSchema, { name });
     const validatedFile = validateWithZodSchema(imageSchema, { image: file });
-    const predict = await predictModel(file);
+    const myPrediction = await predictModel(file);
+    const sonuc = myPrediction.prediction;
+    const predict = sonuc === 1 ? "malign" : "benign";
 
     await db.patient.create({
       data: {
@@ -237,5 +239,27 @@ export const createPatientAction = async (
 };
 
 const predictModel = async (image: File) => {
-  return "hello";
+  try {
+    // FormData oluşturup dosyayı ekle
+    const formData = new FormData();
+    formData.append("img", image); // img olarak ekliyoruz çünkü Flask bunu bekliyor
+
+    const response = await fetch(
+      "https://flask-cances-app.onrender.com/predict",
+      {
+        method: "POST",
+        body: formData, // FormData'yı body olarak gönderiyoruz
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Tahmin API isteğinde hata oluştu");
+    }
+
+    const result = await response.json();
+
+    return result;
+  } catch (error) {
+    return renderError(error);
+  }
 };
