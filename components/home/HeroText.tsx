@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Button } from "../ui/button";
 
 function HeroText() {
@@ -9,7 +10,9 @@ function HeroText() {
   const indexes = [0];
 
   return (
-    <div className="lg:hidden">
+    <div className="lg:hidden relative z-20">
+      {" "}
+      {/* Burada z-index ve position: relative eklendi */}
       {indexes.map((index) => (
         <div key={index} className="text-center">
           <h3 className="max-w-2xl font-bold text-2xl tracking-tight sm:text-4xl capitalize text-center text-gray-800">
@@ -19,7 +22,11 @@ function HeroText() {
             {heroContent[index]}
           </p>
           <div className="mt-8">
-            <Button>Popüler Modeller</Button>
+            <Button>
+              <Link href="models/" className="cursor-pointer">
+                Popüler Modeller
+              </Link>
+            </Button>
           </div>
         </div>
       ))}

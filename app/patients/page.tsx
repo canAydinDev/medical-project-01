@@ -20,7 +20,8 @@ import FormInput from "@/components/form/FormInput";
 
 async function Patients() {
   const patients = await fetchUserPatients();
-  if (patients.length === 0) return <EmptyList />;
+  if (patients.length === 0)
+    return <EmptyList heading="Henüz hasta kaydınız bulunmamaktadır..." />;
 
   return (
     <section>
