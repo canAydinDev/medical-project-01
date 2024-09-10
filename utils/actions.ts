@@ -243,13 +243,20 @@ const predictModel = async (image: File) => {
     const formData = new FormData();
     formData.append("img", image);
 
+    const timeout = 10000; // 10 saniye timeout süresi
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeout); // Timeout süresi dolunca isteği iptal eder
+
     const response = await fetch(
       "https://flask-cances-app.onrender.com/predict",
       {
         method: "POST",
         body: formData,
+        signal: controller.signal, // AbortController ile timeout kontrolü
       }
     );
+
+    clearTimeout(id); // Eğer istek başarılı olursa timeout'u temizle
 
     if (!response.ok) {
       throw new Error("Tahmin API isteğinde hata oluştu");
