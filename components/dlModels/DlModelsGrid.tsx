@@ -8,6 +8,7 @@ function DlModelsGrid({ models }: { models: DlModel[] }) {
   return (
     <div className="pt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {models.map((model) => {
+        if (!model) return null;
         const { name, image } = model;
         const modelId = model.id;
         return (

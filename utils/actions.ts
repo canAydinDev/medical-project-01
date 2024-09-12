@@ -303,5 +303,62 @@ export const checkJobStatusAction = async (
     console.error("Hata oluştu:", error);
     return { message: "Bir hata oluştu." };
   }
-  redirect("/patients");
+};
+
+export const fetchFavoriteId = async ({ modelId }: { modelId: string }) => {
+  const user = await getAuthUser();
+  const favorite = await db.favorite.findFirst({
+    where: {
+      modelId,
+      clerkId: user.id,
+    },
+    select: {
+      id: true,
+    },
+  });
+  return favorite?.id || null;
+};
+
+export const toggleFavoriteAction = async (prevState: {
+  modelId: string;
+  favoriteId: string;
+  pathname: string;
+}) => {
+  const user = await getAuthUser();
+  const { modelId, favoriteId, pathname } = prevState;
+  try {
+    if (favoriteId) {
+      await db.favorite.delete({
+        where: {
+          id: favoriteId,
+        },
+      });
+    } else {
+      await db.favorite.create({
+        data: {
+          clerkId: user.id,
+          modelId,
+        },
+      });
+    }
+    revalidatePath(pathname);
+    return {
+      message: favoriteId ? "Favorilerden çıkarıldı" : "Favorilere eklendi",
+    };
+  } catch (error) {
+    renderError(error);
+  }
+};
+
+export const fetchUserFavorites = async () => {
+  const user = await getAuthUser();
+  const favorites = await db.favorite.findMany({
+    where: {
+      clerkId: user.id,
+    },
+    include: {
+      dlModel: true,
+    },
+  });
+  return favorites;
 };
