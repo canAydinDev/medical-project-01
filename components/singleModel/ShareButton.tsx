@@ -22,7 +22,17 @@ type ShareButtonProps = {
 
 function ShareButton({ modelId, name }: ShareButtonProps) {
   const url = process.env.NEXT_PUBLIC_WEBSITE_URL;
-  return <div>SHAREbUTTON</div>;
+  const shareLink = `${url}/models/${modelId}`;
+
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button variant="outline" size="icon" className="p-2">
+          <LuShare2 />
+        </Button>
+      </PopoverTrigger>
+    </Popover>
+  );
 }
 
 export default ShareButton;
