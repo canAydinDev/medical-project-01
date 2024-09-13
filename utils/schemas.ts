@@ -61,3 +61,23 @@ function validateImageFile() {
       );
     }, "File must be an image");
 }
+export const reviewSchema = z.object({
+  modelId: z.string().refine((value) => value !== "", {
+    message: "ModelId bos olamaz",
+  }),
+  authorName: z.string().refine((value) => value !== "", {
+    message: "Model name bos olamaz",
+  }),
+  authorImageUrl: z.string().refine((value) => value !== "", {
+    message: "Yazar resmi bos olamaz",
+  }),
+  rating: z.coerce
+    .number()
+    .int()
+    .min(1, { message: "Degerlendirme en az 1 olmali" })
+    .max(5, { message: "Degerlendirme en fazla 5 olmali" }),
+  comment: z
+    .string()
+    .min(5, { message: "Yorum en az 5 karakter olmali" })
+    .max(500, { message: "Yorum en fazla 500 karakter olmali" }),
+});

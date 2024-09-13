@@ -31,6 +31,22 @@ function ShareButton({ modelId, name }: ShareButtonProps) {
           <LuShare2 />
         </Button>
       </PopoverTrigger>
+      <PopoverContent
+        side="top"
+        align="end"
+        sideOffset={10}
+        className="flex items-center gap-x-2 justify-center w-full"
+      >
+        <TwitterShareButton url={shareLink} title={name}>
+          <TwitterIcon size={32} round />
+        </TwitterShareButton>
+        <LinkedinShareButton url={shareLink} title={name}>
+          <LinkedinIcon size={32} round />
+        </LinkedinShareButton>
+        <EmailShareButton url={shareLink} subject={name}>
+          <EmailIcon size={32} round />
+        </EmailShareButton>
+      </PopoverContent>
     </Popover>
   );
 }

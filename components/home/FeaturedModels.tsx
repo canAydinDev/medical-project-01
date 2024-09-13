@@ -9,7 +9,7 @@ async function FeaturedModels() {
 
   return (
     <section className="pt-24">
-      <SectionTitle text="Populer modeller" />
+      <SectionTitle text="Popüler modeller" />
       <DlModelsGrid models={models} />
     </section>
   );

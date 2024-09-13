@@ -7,6 +7,7 @@ import {
   imageSchema,
   modelSchema,
   patientSchema,
+  reviewSchema,
   validateWithZodSchema,
 } from "./schemas";
 import { deleteImage, uploadImage } from "./supabase";
@@ -362,3 +363,42 @@ export const fetchUserFavorites = async () => {
   });
   return favorites;
 };
+
+export const createReviewAction = async (
+  prevState: any,
+  formData: FormData
+) => {
+  const user = await getAuthUser();
+  try {
+    const rawData = Object.fromEntries(formData);
+
+    const validatedFields = validateWithZodSchema(reviewSchema, rawData);
+
+    await db.review.create({
+      data: {
+        ...validatedFields,
+        clerkId: user.id,
+      },
+    });
+    revalidatePath(`/products/${validatedFields.modelId}`);
+    return { message: "Review submitted successfully" };
+  } catch (error) {
+    return renderError(error);
+  }
+};
+
+export const fetchModelReviews = async (modelId: string) => {
+  const reviews = await db.review.findMany({
+    where: {
+      modelId,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return reviews;
+};
+export const fetchProductReviewsByUser = async () => {};
+export const deleteReviewAction = async () => {};
+export const findExistingReview = async () => {};
+export const fetchProductRating = async () => {};

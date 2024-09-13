@@ -2,8 +2,11 @@ import BreadCrumbs from "@/components/singleModel/BreadCrumbs";
 import { fetchSingleModel } from "@/utils/actions";
 import Image from "next/image";
 import CreatePatientPage from "@/components/patients/CreatePatientPage";
-import { Card, CardContent } from "@/components/ui/card";
+import SubmitReview from "@/components/reviews/SubmitReview";
+import ModelReviews from "@/components/reviews/ModelReviews";
 import FavouriteToggleButton from "@/components/dlModels/FavouriteToggleButton";
+import ShareButton from "@/components/singleModel/ShareButton";
+import ModelRating from "@/components/singleModel/ModelRating";
 
 async function SingleModelPage({ params }: { params: { id: string } }) {
   const model = await fetchSingleModel(params.id);
@@ -30,8 +33,12 @@ async function SingleModelPage({ params }: { params: { id: string } }) {
             <h1 className="capitalize text-3xl font-bold">
               {model?.name || ""}
             </h1>
-            <FavouriteToggleButton modelId={params.id} />
+            <div className="flex items-center gap-x-2">
+              <FavouriteToggleButton modelId={params.id} />
+              <ShareButton name={model?.name || ""} modelId={params.id} />
+            </div>
           </div>
+          <ModelRating modelId={params.id} />
 
           <p className="mt-6 leading-8 text-muted-foreground">
             {model?.description}
@@ -39,6 +46,8 @@ async function SingleModelPage({ params }: { params: { id: string } }) {
           <CreatePatientPage modelId={modelId} />
         </div>
       </div>
+      <ModelReviews modelId={params.id} />
+      <SubmitReview modelId={params.id} />
     </section>
   );
 }
