@@ -399,8 +399,69 @@ export const fetchModelReviews = async (modelId: string) => {
   return reviews;
 };
 
-export const fetchProductReviewsByUser = () => {};
+export const fetchModelReviewsByUser = async () => {
+  const user = await getAuthUser();
+  const reviews = await db.review.findMany({
+    where: {
+      clerkId: user.id,
+    },
+    select: {
+      id: true,
+      rating: true,
+      comment: true,
+      dlModel: {
+        select: {
+          image: true,
+          name: true,
+        },
+      },
+    },
+  });
+  return reviews;
+};
 
-export const deleteReviewAction = async () => {};
-export const findExistingReview = async () => {};
-export const fetchProductRating = async () => {};
+export const deleteReviewAction = async (prevState: { reviewId: string }) => {
+  const { reviewId } = prevState;
+  const user = await getAuthUser();
+  try {
+    await db.review.delete({
+      where: {
+        id: reviewId,
+        clerkId: user.id,
+      },
+    });
+    revalidatePath("/reviews");
+    return { message: "Yorum başarıyla silindi." };
+  } catch (error) {
+    return renderError(error);
+  }
+};
+export const findExistingReview = async (userId: string, modelId: string) => {
+  return db.review.findFirst({
+    where: {
+      clerkId: userId,
+      modelId,
+    },
+  });
+};
+
+export const fetchModelRating = async (modelId: string) => {
+  const result = await db.review.groupBy({
+    by: ["modelId"],
+    _avg: {
+      rating: true,
+    },
+    _count: {
+      rating: true,
+    },
+    where: {
+      modelId,
+    },
+  });
+
+  // empty array if no reviews
+  return {
+    rating: result[0]?._avg.rating?.toFixed(1) ?? 0,
+    count: result[0]?._count.rating ?? 0,
+  };
+};

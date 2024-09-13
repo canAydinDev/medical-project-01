@@ -1,5 +1,4 @@
 import BreadCrumbs from "@/components/singleModel/BreadCrumbs";
-import { fetchSingleModel } from "@/utils/actions";
 import Image from "next/image";
 import CreatePatientPage from "@/components/patients/CreatePatientPage";
 import SubmitReview from "@/components/reviews/SubmitReview";
@@ -7,10 +6,17 @@ import ModelReviews from "@/components/reviews/ModelReviews";
 import FavouriteToggleButton from "@/components/dlModels/FavouriteToggleButton";
 import ShareButton from "@/components/singleModel/ShareButton";
 import ModelRating from "@/components/singleModel/ModelRating";
+import { fetchSingleModel, findExistingReview } from "@/utils/actions";
+import { auth } from "@clerk/nextjs/server";
 
 async function SingleModelPage({ params }: { params: { id: string } }) {
+  const { userId } = auth();
+
   const model = await fetchSingleModel(params.id);
   const modelId = params.id || "";
+  const reviewDoesNotExist =
+    userId && !(await findExistingReview(userId, modelId));
+
   return (
     <section>
       <BreadCrumbs name={model?.name || ""} />
@@ -47,6 +53,7 @@ async function SingleModelPage({ params }: { params: { id: string } }) {
         </div>
       </div>
       <ModelReviews modelId={params.id} />
+      {reviewDoesNotExist && <SubmitReview modelId={params.id} />}
       <SubmitReview modelId={params.id} />
     </section>
   );

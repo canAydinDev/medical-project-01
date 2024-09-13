@@ -1,8 +1,8 @@
+import { fetchModelRating } from "@/utils/actions";
 import { FaStar } from "react-icons/fa";
 
 async function ModelRating({ modelId }: { modelId: string }) {
-  const rating = 4.1;
-  const count = 25;
+  const { rating, count } = await fetchModelRating(modelId);
   const className = `flex gap-1 items-center text-md mt-1 mb-4 `;
   const countValue = `   ${count} kişi oyladı`;
   return (
