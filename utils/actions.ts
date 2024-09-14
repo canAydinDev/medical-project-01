@@ -324,7 +324,7 @@ export const toggleFavoriteAction = async (prevState: {
   modelId: string;
   favoriteId: string;
   pathname: string;
-}) => {
+}): Promise<{ message: string }> => {
   const user = await getAuthUser();
   const { modelId, favoriteId, pathname } = prevState;
   try {
@@ -348,6 +348,7 @@ export const toggleFavoriteAction = async (prevState: {
     };
   } catch (error) {
     renderError(error);
+    return { message: "Bir hata oluştu, lütfen tekrar deneyin." }; // Hata durumunda mesaj döndürülüyor
   }
 };
 

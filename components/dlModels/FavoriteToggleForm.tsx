@@ -14,12 +14,12 @@ function FavoriteToggleForm({ modelId, favoriteId }: FavoriteToggleFormProps) {
   const pathname = usePathname();
   const toggleAction = toggleFavoriteAction.bind(null, {
     modelId,
-    favoriteId,
+    favoriteId: favoriteId ?? "",
     pathname,
   });
   return (
     <FormContainer action={toggleAction}>
-      <CardSubmitButton isFavorite={favoriteId ? true : false} />
+      <CardSubmitButton isFavorite={!!favoriteId} />
     </FormContainer>
   );
 }
