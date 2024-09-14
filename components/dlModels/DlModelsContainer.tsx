@@ -18,7 +18,6 @@ async function DlModelsContainer({
   const searchTerm = search ? `&search=${search}` : "";
   return (
     <>
-      {/* HEADER */}
       <section>
         <div className="flex justify-between items-center">
           <h4 className="font-medium text-lg text-myColor">

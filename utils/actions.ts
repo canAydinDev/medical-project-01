@@ -465,3 +465,27 @@ export const fetchModelRating = async (modelId: string) => {
     count: result[0]?._count.rating ?? 0,
   };
 };
+
+export const fetchAllReviews = async () => {
+  const reviews = await db.review.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+    take: 3, // İlk 3 yorumu getir
+    select: {
+      comment: true,
+      rating: true,
+      clerkId: true,
+      authorName: true,
+      authorImageUrl: true,
+      dlModel: {
+        select: {
+          name: true, // Model ismi
+          image: true, // Model resmi
+        },
+      },
+    },
+  });
+
+  return reviews;
+};

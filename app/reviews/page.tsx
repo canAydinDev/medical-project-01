@@ -1,8 +1,4 @@
-import {
-  deleteReviewAction,
-  fetchModelReviews,
-  fetchModelReviewsByUser,
-} from "@/utils/actions";
+import { deleteReviewAction, fetchModelReviewsByUser } from "@/utils/actions";
 import ReviewCard from "@/components/reviews/ReviewCard";
 import SectionTitle from "@/components/global/SectionTitle";
 import FormContainer from "@/components/form/FormContainer";
