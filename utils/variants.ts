@@ -21,5 +21,12 @@ export const fadeIn = (
         ease: [0.25, 0.25, 0.25, 0.75],
       },
     },
+
+    whileHover: {
+      scale: 1.1, // Example of changing text color
+      transition: {
+        duration: 0.3, // Optional transition for hover effect
+      },
+    },
   };
 };
