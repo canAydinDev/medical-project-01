@@ -13,7 +13,6 @@ function ReviewMotionPage() {
         initial="hidden"
         whileInView={"show"}
         viewport={{ once: false, amount: 0.7 }}
-        className="grid md:grid-cols-3 gap-8 mt-4"
       >
         <ReviewsHomePage />
       </motion.section>
