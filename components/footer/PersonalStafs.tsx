@@ -24,7 +24,7 @@ function PersonalStafs() {
         whileInView={"show"}
         viewport={{ once: false, amount: 0.7 }}
         whileHover={"whileHover"}
-        href="#"
+        href="https://nextjs-portfolio-livid-rho.vercel.app/"
         className="underline underline-offset-4"
       >
         canaydin.com.tr
