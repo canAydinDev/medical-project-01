@@ -19,6 +19,12 @@ function CreateModelPage() {
               label="model adi"
               defaultValue="model_adi"
             />
+            <FormInput
+              type="text"
+              name="url"
+              label="model url adresi"
+              defaultValue="model_adi"
+            />
             <ImageInput />
           </div>
           <TextAreaInput

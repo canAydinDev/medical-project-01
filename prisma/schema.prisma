@@ -12,6 +12,8 @@ generator client {
 model DlModel {
   id           String     @id @default(uuid())
   name        String
+  url         String @default("https://flask-cances-app.onrender.com/predict")
+  jobStatusUrl         String @default("https://flask-cances-app.onrender.com/status/")
   featured   Boolean
   image       String
   description String

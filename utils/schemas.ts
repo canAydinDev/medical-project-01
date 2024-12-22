@@ -9,6 +9,14 @@ export const modelSchema = z.object({
     .max(100, {
       message: "isim 100 karakterden az olmalidir.",
     }),
+  url: z
+    .string()
+    .min(2, {
+      message: "url 2 karakterden fazla olmalidir.",
+    })
+    .max(100, {
+      message: "url 100 karakterden az olmalidir.",
+    }),
   featured: z.coerce.boolean(),
   description: z.string().refine(
     (description) => {

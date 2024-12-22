@@ -58,6 +58,12 @@ async function Patients() {
                     />
                     <input
                       type="hidden"
+                      id="modelId"
+                      name="modelId"
+                      value={patient.modelId}
+                    />
+                    <input
+                      type="hidden"
                       id="patientId"
                       name="patientId"
                       value={patient.id}

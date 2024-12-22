@@ -216,12 +216,15 @@ export const createPatientAction = async (
     const name = formData.get("name") as string;
     const file = formData.get("image") as File;
     const modelId = formData.get("modelId") as string;
+    const modelUrl =
+      (formData.get("url") as string) ||
+      "https://flask-cances-app.onrender.com/predict";
 
     const validatedFields = validateWithZodSchema(patientSchema, { name });
     const validatedFile = validateWithZodSchema(imageSchema, { image: file });
 
     // Flask API'ye tahmin işlemini başlatacak bir istek gönder
-    const jobId = await startPrediction(file);
+    const jobId = await startPrediction(file, modelUrl);
 
     // Kullanıcıya işlemin başladığını ve sonucun beklenmesi gerektiğini bildir
     await db.patient.create({
@@ -241,18 +244,15 @@ export const createPatientAction = async (
 };
 
 // Flask API'de tahmin işlemini başlatan işlev
-const startPrediction = async (image: File) => {
+const startPrediction = async (image: File, modelUrl: string) => {
   try {
     const formData = new FormData();
     formData.append("img", image);
 
-    const response = await fetch(
-      "https://flask-cances-app.onrender.com/predict",
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
+    const response = await fetch(modelUrl, {
+      method: "POST",
+      body: formData,
+    });
 
     if (!response.ok) {
       throw new Error("Tahmin API isteğinde hata oluştu");
@@ -272,14 +272,24 @@ export const checkJobStatusAction = async (
 ): Promise<{ message: string }> => {
   const jobId = formData.get("jobId") as string; // formData'dan jobId'yi alıyoruz
   const patientId = formData.get("patientId") as string;
+  const modelId = formData.get("modelId") as string;
+
+  const model = await db.dlModel.findFirst({
+    where: {
+      id: modelId,
+    },
+  });
+
+  // model URL'yi kontrol ediyoruz
+  const jobUrl = model?.jobStatusUrl;
+  if (!jobUrl) {
+    return { message: "Model URL bulunamadı." };
+  }
 
   try {
-    const response = await fetch(
-      `https://flask-cances-app.onrender.com/status/${jobId}`,
-      {
-        method: "GET",
-      }
-    );
+    const response = await fetch(`${jobUrl}${jobId}`, {
+      method: "GET",
+    });
 
     const result = await response.json();
 

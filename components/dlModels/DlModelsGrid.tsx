@@ -3,8 +3,6 @@ import { Card, CardContent } from "../ui/card";
 import Image from "next/image";
 import Link from "next/link";
 import FavouriteToggleButton from "./FavouriteToggleButton";
-import { motion } from "framer-motion";
-import { fadeIn } from "@/utils/variants";
 
 function DlModelsGrid({ models }: { models: DlModel[] }) {
   return (

@@ -14,10 +14,10 @@ function HeroText() {
       {" "}
       {indexes.map((index) => (
         <div key={index} className="text-center">
-          <h3 className="max-w-2xl font-bold text-2xl tracking-tight sm:text-4xl capitalize text-center text-gray-600">
+          <h3 className="max-w-2xl font-bold text-2xl tracking-tight sm:text-4xl capitalize text-center mx-auto text-gray-600">
             {heroText[index]}
           </h3>
-          <p className="mt-2 max-w-xl text-lg leading-8 text-muted-foreground text-gray-100">
+          <p className="mt-2 max-w-xl text-lg leading-8 text-muted-foreground text-gray-100 text-center mx-auto">
             {heroContent[index]}
           </p>
           <div className="mt-8">
